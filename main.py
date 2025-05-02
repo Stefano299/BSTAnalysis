@@ -11,47 +11,45 @@ import timeit
 import gc
 
 
-
-
-def measureTimeInsert(keys, tree):
+def measure_time_insert(nodes, tree):
   #gc.collect()
   #gc.disable()
   start = perf_counter()
-  for key in keys:
-    tree.insert(Node(key))
+  for node in nodes:
+    tree.insert(node)
   end = perf_counter()
   #gc.enable()
   return end - start
   
 
   
-def testInsert(startN, endN, step, maxN):
-  sizes = np.arange(startN, endN, step)
+def test_insert(start_n, end_n, step, max_n):
+  sizes = np.arange(start_n, end_n, step)
   times_flag = []
   times_list = []
   for n in sizes:
-    keys = generateRandomKeys(n, maxN)
+    keys = generate_random_keys(n, max_n)
     
-    flagTime = measureTimeInsert(keys, FlagABR())
-    listTime = measureTimeInsert(keys, ListABR())
+    flag_time = measure_time_insert(keys, FlagABR())
+    list_time = measure_time_insert(keys, ListABR())
     
-    times_flag.append(flagTime)
-    times_list.append(listTime)
-    print(f"n={n} FlagABR: {flagTime:.4f}s, ListABR: {listTime:.4f}s")
+    times_flag.append(flag_time)
+    times_list.append(list_time)
+    print(f"n={n} FlagABR: {flag_time:.4f}s, ListABR: {list_time:.4f}s")
 
-  createAndShowPlt(
+  create_and_show_plt(
     sizes,
     times_flag,
     "Numero di inserimenti",
     "Tempo di inserimento (s)",
     "Confronto tempo di inserimento: FlagABR vs ListABR",
     label1="FlagABR",
-    yArr2=times_list,
+    y_arr2=times_list,
     label2="ListABR"
   )
 
 def main():
-  testInsert(10, 5000, 100, 5)
+  test_insert(10, 5000, 100, 5)
   
 if __name__ == "__main__":
     main()

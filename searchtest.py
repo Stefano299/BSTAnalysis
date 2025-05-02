@@ -5,25 +5,25 @@ import numpy as np  # added numpy import
 from abr import *
 from utils import *
 
-def measureTimeSearch(node, tree):
+def measure_time_search(node, tree):
   gc.collect()
   gc.disable()
   start = perf_counter()
-  resultList = tree.search(tree.root, node.key)
-  resultList.search(node)
+  result_list = tree.search(tree.root, node.key)
+  result_list.search(node)
   end = perf_counter()
   time = end - start
   gc.enable()
   return time
   
-def testSearch(startN, endN, step, maxN):
-  sizes = np.arange(startN, endN, step)
+def test_search(start_n, end_n, step, max_n):
+  sizes = np.arange(start_n, end_n, step)
   times_standard = []
   times_flag = []
   times_list = []
   for n in sizes:
     # generate nodes and extract keys
-    nodes1 = generateRandomNodes(n, maxN)
+    nodes1 = generate_random_nodes(n, max_n)
     nodes2 = copy.deepcopy(nodes1)
     nodes3 = copy.deepcopy(nodes1)
     search_node = np.random.choice(nodes1)  
@@ -38,15 +38,15 @@ def testSearch(startN, endN, step, maxN):
     for node in nodes3:
       list_tree.insert(node)
     # measure search
-    t_std = measureTimeSearch(search_node, std_tree)
-    t_flag = measureTimeSearch(search_node, flag_tree)
-    t_list = measureTimeSearch(search_node, list_tree)
+    t_std = measure_time_search(search_node, std_tree)
+    t_flag = measure_time_search(search_node, flag_tree)
+    t_list = measure_time_search(search_node, list_tree)
     times_standard.append(t_std)
     times_flag.append(t_flag)
     times_list.append(t_list)
     print(f"n={n}, StandardABR search: {t_std:.6f}s, FlagABR search: {t_flag:.6f}s, ListABR search: {t_list:.6f}s")
   # plot results
-  createAndShowPlt(
+  create_and_show_plt(
     sizes,
     times_standard,
     "Dimensione albero",
@@ -59,7 +59,7 @@ def testSearch(startN, endN, step, maxN):
     label3="ListABR"
   )
   
-testSearch(10, 5000, 50, 5)
+test_search(10, 4000, 50, 5)
 
   
 """

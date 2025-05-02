@@ -5,28 +5,28 @@ import matplotlib.pyplot as plt
 from timeit import default_timer as timer
 from time import perf_counter
 
-def measureTime(algorithm, *args):
+def measure_time(algorithm, *args):
     start = perf_counter()
     algorithm(*args)
     end = perf_counter()
     return end - start
   
-def createAndShowPlt(xArr, yArr1, xLabel, yLabel, title, label1=None, yArr2=None, label2=None, yArr3=None, label3=None):
-    plt.plot(xArr, yArr1, label=label1 if label1 is not None else None)
-    if yArr2 is not None:
-        plt.plot(xArr, yArr2, label=label2 if label2 is not None else None)
-    if yArr3 is not None:
-        plt.plot(xArr, yArr3, label=label3 if label3 is not None else None)
-    plt.xlabel(xLabel)
-    plt.ylabel(yLabel)
+def create_and_show_plt(x_arr, y_arr1, x_label, y_label, title, label1=None, y_arr2=None, label2=None, y_arr3=None, label3=None):
+    plt.plot(x_arr, y_arr1, label=label1 if label1 is not None else None)
+    if y_arr2 is not None:
+        plt.plot(x_arr, y_arr2, label=label2 if label2 is not None else None)
+    if y_arr3 is not None:
+        plt.plot(x_arr, y_arr3, label=label3 if label3 is not None else None)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
     plt.title(title)
     plt.legend()
     plt.grid(True)
     plt.show()
     
-def generateRandomNodes(n, maxN):
+def generate_random_nodes(n, max_n):
     nodes = []
     for _ in range(n):
-      key = random.randint(1, maxN)
+      key = random.randint(1, max_n)
       nodes.append(Node(key))
     return nodes

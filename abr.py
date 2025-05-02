@@ -29,35 +29,32 @@ class BaseABR:
             self.inorder_walk(x.left)
             print(x.key)
             self.inorder_walk(x.right)
-    def getHeightAux(self, x):
+    def get_height_aux(self, x):
         if x == None:
             return -1
-        return 1 + max(self.getHeightAux(x.left), self.getHeightAux(x.right))
+        return 1 + max(self.get_height_aux(x.left), self.get_height_aux(x.right))
    
-    def getHeight(self):
-        return self.getHeightAux(self.root)
+    def get_height(self):
+        return self.get_height_aux(self.root)
     
-    def addNodes(self, n, maxNum):
+    def add_nodes(self, n, max_num):
         for i in range(n):
-            key = random.randint(1, maxNum)
+            key = random.randint(1, max_num)
             self.insert(Node(key))
 
 class StandardABR(BaseABR):
-    def search(self, x, k):
-        results = LinkedList()
-        stack = [x]
-        while stack:
-            node = stack.pop()
-            if node is None:
-                continue
-            if node.key == k:
-                results.add(node)
-                stack.append(node.left)
-                stack.append(node.right)
-            elif k < node.key:
-                stack.append(node.left)
-            else:
-                stack.append(node.right)
+    def search(self, x, k, results = None):
+        if results is None:
+            results = LinkedList()
+        if x is None:
+            return 
+        if x.key == k:
+            results.add(x)
+            self.search(x.right, k, results)
+        elif k < x.key:
+            self.search(x.left, k, results)
+        else:
+            self.search(x.right, k, results)
         return results
 
     def insert(self, z):
@@ -107,36 +104,33 @@ class FlagABR(BaseABR):
             else:
                 y.right = z
 
-    def search(self, x, k):
-        results = LinkedList()
-        stack = [x]
-        while stack:
-            node = stack.pop()
-            if node is None:
-                continue
-            if node.key == k:
-                results.add(node)
-                stack.append(node.left)
-                stack.append(node.right)
-            elif k < node.key:
-                stack.append(node.left)
-            else:
-                stack.append(node.right)
+    def search(self, x, k, results = None):
+        if results is None:
+            results = LinkedList()
+        if x is None:
+            return 
+        if x.key == k:
+            results.add(x)
+            self.search(x.left, k, results)
+            self.search(x.right, k, results)
+        elif k < x.key:
+            self.search(x.left, k, results)
+        else:
+            self.search(x.right, k, results)
         return results
     
 class ListABR(BaseABR):
     def search(self, x, k):
-        results = LinkedList()
-        node = x
-        while node is not None:
-            if node.key == k:
-                results = node.list
-                results.add(node)
-                return results
-            elif k < node.key:
-                node = node.left
-            else:
-                node = node.right
+        results = None
+        if x is None:
+            return LinkedList()  #ritorna una LinkedList vuota se non trova nulla
+        if x.key == k:
+            results = x.list
+            results.add(x)
+        elif k < x.key:
+            results = self.search(x.left, k)
+        else:
+            results = self.search(x.right, k)
         return results
     
     def insert(self, z):
@@ -160,13 +154,13 @@ class ListABR(BaseABR):
             y.right = z
 
 """
-def calcHeghit():
+def calc_heghit():
   heights = []
   nums = np.arange(30)
   for i in range(30):
     tree = ABR2()
-    addNodes(tree, 10000)
-    heights.append(tree.getHeight(tree.root))
+    add_nodes(tree, 10000)
+    heights.append(tree.get_height(tree.root))
     
   plt.plot(nums, heights)
   plt.xlabel('Iteration')
@@ -175,15 +169,15 @@ def calcHeghit():
   plt.grid(True)
   plt.show()
   
-def heightTime():
+def height_time():
   sizes = [3000] * 50
   tempi3 = []
   heights = []
   for n in sizes:
       tree3 = ABR3()
-      t = measureTime(addNodes, tree3, n)
+      t = measure_time(add_nodes, tree3, n)
       tempi3.append(t)
-      heights.append(tree3.getHeight(tree3.root))
+      heights.append(tree3.get_height(tree3.root))
   
   plt.plot(tempi3, heights)
   plt.xlabel('Iteration')
@@ -191,28 +185,28 @@ def heightTime():
   plt.title('Height of ABR2 after 1000 insertions')
   plt.grid(True)
   plt.show()
-def insertTest(startN, endN, step, dupRate):
-  sizes = list(range(startN, endN, step))  # Esempio: da 10 a 100 con passo 10
+def insert_test(start_n, end_n, step, dup_rate):
+  sizes = list(range(start_n, end_n, step))  # Esempio: da 10 a 100 con passo 10
 
   tempi1 = []
   for n in sizes:
-    standardABR = StandardABR()
-    maxN = computeMaxNum(n, dupRate)
-    t = measureTime(standardABR.addNodes, n, maxN)
+    standard_abr = StandardABR()
+    max_n = compute_max_num(n, dup_rate)
+    t = measure_time(standard_abr.add_nodes, n, max_n)
     tempi1.append(t)
 
   tempi2 = []
   for n in sizes:
-    flagABR = FlagABR()
-    maxN = computeMaxNum(n, dupRate)
-    t = measureTime(flagABR.addNodes, n, maxN)
+    flag_abr = FlagABR()
+    max_n = compute_max_num(n, dup_rate)
+    t = measure_time(flag_abr.add_nodes, n, max_n)
     tempi2.append(t)
 
   tempi3 = []
   for n in sizes:
-    listABR = ListABR()
-    maxN = computeMaxNum(n, dupRate)
-    t = measureTime(listABR.addNodes, n, maxN)
+    list_abr = ListABR()
+    max_n = compute_max_num(n, dup_rate)
+    t = measure_time(list_abr.add_nodes, n, max_n)
     tempi3.append(t)
 
   # aggiunta smoothing con media mobile
@@ -229,10 +223,10 @@ def insertTest(startN, endN, step, dupRate):
   tempi2 = moving_average(tempi2)
   tempi3 = moving_average(tempi3)
 
-  createAndShowPlt(
+  create_and_show_plt(
     sizes, tempi1, 'Size', 'Tempo di inserimento (s)', 
     'Tempo di inserimento in ABR1 vs ABR2 vs ABR3',
-    label1='ABR1', yArr2=tempi2, label2='ABR2', yArr3=tempi3, label3='ABR3'
+    label1='ABR1', y_arr2=tempi2, label2='ABR2', y_arr3=tempi3, label3='ABR3'
   )
   
 """

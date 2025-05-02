@@ -64,7 +64,7 @@ class LinkedList:
                 current = current.get_next()
         return found
 
-    def PrintL(self):
+    def print_l(self):
         current = self.head
         previous = None
         while current != None:

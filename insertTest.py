@@ -8,7 +8,7 @@ import gc
 import copy
 
 
-def measureTimeInsert(nodes, tree):
+def measure_time_insert(nodes, tree):
   gc.collect()
   gc.disable()
   start = perf_counter()
@@ -19,26 +19,26 @@ def measureTimeInsert(nodes, tree):
   return end - start
   
 
-def testInsert3(startN, endN, step, maxN):
-  sizes = np.arange(startN, endN, step)
+def test_insert3(start_n, end_n, step, max_n):
+  sizes = np.arange(start_n, end_n, step)
   times_flag = []
   times_list = []
   times_standard = []
   for n in sizes:
-    nodes1 = generateRandomNodes(n, maxN)
+    nodes1 = generate_random_nodes(n, max_n)
     nodes2 = copy.deepcopy(nodes1)
-    nodes3 = copy.deppcopy(nodes1)
+    nodes3 = copy.deepcopy(nodes1)
     
-    flagTime = measureTimeInsert(nodes1, FlagABR())
-    listTime = measureTimeInsert(nodes2, ListABR())
-    standardTime = measureTimeInsert(nodes3, StandardABR())
+    flag_time = measure_time_insert(nodes1, FlagABR())
+    list_time = measure_time_insert(nodes2, ListABR())
+    standard_time = measure_time_insert(nodes3, StandardABR())
     
-    times_flag.append(flagTime)
-    times_list.append(listTime)
-    times_standard.append(standardTime)
-    print(f"n={n}, FlagABR: {flagTime:.4f}s, ListABR: {listTime:.4f}s, StandardABR: {standardTime:.4f}s")
+    times_flag.append(flag_time)
+    times_list.append(list_time)
+    times_standard.append(standard_time)
+    print(f"n={n}, FlagABR: {flag_time:.4f}s, ListABR: {list_time:.4f}s, StandardABR: {standard_time:.4f}s")
 
-  createAndShowPlt(
+  create_and_show_plt(
     sizes,
     times_flag,
     "Numero di inserimenti",
@@ -51,23 +51,23 @@ def testInsert3(startN, endN, step, maxN):
     label3="StandardABR"
   )
   
-def testInsert2(startN, endN, step, maxN):
-  sizes = np.arange(startN, endN, step)
+def test_insert2(start_n, end_n, step, max_n):
+  sizes = np.arange(start_n, end_n, step)
   times_flag = []
   times_list = []
   for n in sizes:
-    nodes1 = generateRandomNodes(n, maxN)
+    nodes1 = generate_random_nodes(n, max_n)
     nodes2 = copy.deepcopy(nodes1)
 
     
-    flagTime = measureTimeInsert(nodes1, FlagABR())
-    listTime = measureTimeInsert(nodes2, ListABR())
+    flag_time = measure_time_insert(nodes1, FlagABR())
+    list_time = measure_time_insert(nodes2, ListABR())
     
-    times_flag.append(flagTime)
-    times_list.append(listTime)
-    print(f"n={n} FlagABR: {flagTime:.4f}s, ListABR: {listTime:.4f}s")
+    times_flag.append(flag_time)
+    times_list.append(list_time)
+    print(f"n={n} FlagABR: {flag_time:.4f}s, ListABR: {list_time:.4f}s")
 
-  createAndShowPlt(
+  create_and_show_plt(
     sizes,
     times_flag,
     "Numero di inserimenti",
@@ -77,7 +77,7 @@ def testInsert2(startN, endN, step, maxN):
     yArr2=times_list,
     label2="ListABR"
   )
-#testInsert3(10, 1000, 50, 5)
-#testInsert3(10, 5000, 100, 20)
-testInsert2(10, 15000, 400, 20)
-#testInsert2(10, 1000, 25, 20)
+#test_insert3(10, 1000, 50, 5)
+#test_insert3(10, 5000, 100, 20)
+test_insert2(10, 15000, 400, 20)
+#test_insert2(10, 1000, 25, 20)
