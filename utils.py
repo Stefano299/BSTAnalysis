@@ -1,8 +1,7 @@
 from abr import *
 import random
-import numpy as np
+import math
 import matplotlib.pyplot as plt
-from timeit import default_timer as timer
 from time import perf_counter
 
 def measure_time(algorithm, *args):
@@ -30,3 +29,45 @@ def generate_random_nodes(n, max_n):
       key = random.randint(1, max_n)
       nodes.append(Node(key))
     return nodes
+
+def count_nonzero_elements(lst):
+        count = 0
+        for x in lst:
+            if x != 0:
+                count += 1
+        return count
+def compute_nodes_repetitions(nodes_list, max_key):
+    counts = [0] * (max_key+1)
+    for node in nodes_list:
+        counts[node.key] += 1
+    return counts
+
+    
+
+def compute_ranges(n, percentages):  #Restituisce i ranges per ottenere determinate percentuali di chiavi duplicate
+    ranges = []
+    for perc in percentages:
+        target_frac = perc / 100.0
+
+        def dup_frac(m):
+            distinct_expected = m * (1 - math.exp(-n / m))
+            return 1 - distinct_expected / n
+
+        if target_frac <= 0:
+            ranges.append(float('inf'))
+            continue
+
+        m_low, m_high = 1, max(2, int(n * 2))
+        while dup_frac(m_high) > target_frac:
+            m_high *= 2
+
+        for _ in range(50):
+            m_mid = (m_low + m_high) / 2
+            if dup_frac(m_mid) > target_frac:
+                m_low = m_mid
+            else:
+                m_high = m_mid
+
+        ranges.append(int(round(m_mid)))
+
+    return ranges
